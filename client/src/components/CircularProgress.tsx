@@ -1,5 +1,5 @@
 // src/components/CircularProgress.tsx
-import React from "react";
+// import React from "react";
 
 interface CircularProgressProps {
   progress: number; // 0~100

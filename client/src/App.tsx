@@ -61,9 +61,9 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
 
   // 데이터 로딩
   const items = useFeed(feedKey); // ⬅️ 기존엔 category 문자열이었는데, 이제 feedKey를 그대로 넘겨서 백엔드 키와 1:1
-  const allItems = initialItems.length > 0 && feedKey === "hk-all"
-    ? [...initialItems, ...items]
-    : items;
+  // const allItems = initialItems.length > 0 && feedKey === "hk-all"
+  //   ? [...initialItems, ...items]
+  //   : items;
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (!k) return items;
