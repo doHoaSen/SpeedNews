@@ -1,0 +1,31 @@
+services:
+  # 프런트엔드 (빌드 후 Nginx로 정적 파일 서빙)
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.frontend
+    image: speednews/frontend:local
+    restart: always
+    # ❌ ports 제거 (직접 노출하지 않고 proxy를 통해서만 접근)
+
+  # 백엔드 (Spring Boot)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: speednews/backend:local
+    restart: always
+    # ❌ ports 제거 (직접 노출하지 않고 proxy를 통해서만 접근)
+    # DB 안 쓰면 env_file 도 생략 가능
+
+  # 리버스 프록시 (Nginx)
+  proxy:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"   # ✅ 오직 proxy만 외부로 노출
+    depends_on:
+      - frontend
+      - backend
+    restart: always

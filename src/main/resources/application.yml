@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+
+news:
+  feeds:
+    # 한국경제
+    hk-all: "https://www.hankyung.com/feed/all-news"
+    hk-economy: "https://www.hankyung.com/feed/economy"
+    hk-politics: "https://www.hankyung.com/feed/politics"
+    hk-it: "https://www.hankyung.com/feed/it"
+    hk-finance: "https://www.hankyung.com/feed/finance"
+
+    # 연합뉴스
+    yna-latest: "https://www.yna.co.kr/rss/news.xml"
+    yna-politics: "https://www.yna.co.kr/rss/politics.xml"
+    yna-economy: "https://www.yna.co.kr/rss/economy.xml"
+    yna-industry: "https://www.yna.co.kr/rss/industry.xml"
+    yna-society: "https://www.yna.co.kr/rss/society.xml"
+    yna-world: "https://www.yna.co.kr/rss/international.xml"

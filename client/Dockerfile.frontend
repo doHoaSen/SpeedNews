@@ -1,0 +1,14 @@
+FROM node:20-alpine AS build
+WORKDIR /app
+
+# 1) 의존성 먼저 설치
+COPY package*.json ./
+# npm ci 대신 optional 포함해서 설치
+RUN npm i --include=optional
+
+# 2) 소스 복사 + 빌드
+COPY . .
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY --from=build /app/dist /usr/share/nginx/html

@@ -1,0 +1,35 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'doHoaSen'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	// RSS 파서
+	implementation("com.rometools:rome:2.1.0")
+	// 캐시
+	implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+	// (선택) HTML 파싱(og:image 추출 등 필요 시)
+	implementation("org.jsoup:jsoup:1.17.2")
+
+	compileOnly("org.projectlombok:lombok:1.18.32")
+	annotationProcessor("org.projectlombok:lombok:1.18.32")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+tasks.test { useJUnitPlatform() }
