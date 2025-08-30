@@ -41,7 +41,7 @@ const SOURCES: Record<SourceKey, {
   },
 };
 
-export default function App({ initialItems = [] }: { initialItems?: News[] }) {
+export default function App({  }: { initialItems?: News[] }) {
   const [source, setSource] = useState<SourceKey>(() => (localStorage.getItem("src") as SourceKey) || "hk");
   const [cat, setCat] = useState<string>(() => {
     const initSrc = (localStorage.getItem("src") as SourceKey) || "hk";
