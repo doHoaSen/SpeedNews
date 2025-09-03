@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { API } from "./config";
+
 export type News = {
   source: string; category: string; title: string; link: string;
   description?: string; author?: string; pubDateIso?: string; thumbnail?: string;
@@ -13,7 +15,7 @@ useEffect(() => {
   let cancelled = false;
   (async () => {
     try {
-      const r = await fetch(`/api/news?category=${encodeURIComponent(category)}`);
+      const r = await fetch(`${API}/news?category=${encodeURIComponent(category)}`);
       if (!r.ok) throw new Error(`REST ${r.status}`);
       const data: News[] = await r.json();
       if (!cancelled) {
@@ -31,7 +33,7 @@ useEffect(() => {
   // 2) 실시간 (SSE)
   useEffect(() => {
   // ⬇︎ 프록시(/api/stream) 대신 직접 백엔드로
-  const es = new EventSource(`/api/stream?category=${encodeURIComponent(category)}`);
+  const es = new EventSource(`${API}/stream?category=${encodeURIComponent(category)}`);
   esRef.current = es;
   const onNews = (ev: MessageEvent) => {
     try {
