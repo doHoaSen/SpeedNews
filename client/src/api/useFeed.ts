@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {API, apiUrl} from "./config.ts";
+import {apiUrl} from "./config.ts";
 
 export type News = {
   source: string; category: string; title: string; link: string;
