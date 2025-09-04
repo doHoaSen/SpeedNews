@@ -72,7 +72,7 @@ export default function App({}: { initialItems?: News[] }) {
   }, [view]);
 
   // 데이터 로딩 (오류/라이브 상태 포함)
-  const { items, error, live } = useFeed(feedKey);
+  const { items, error } = useFeed(feedKey);
 
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
