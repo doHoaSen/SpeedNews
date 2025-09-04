@@ -3,7 +3,7 @@ services:
     name: speednews-staging        # 서비스 이름(중복 안 되게)
     env: docker
     rootDir: .
-    dockerfilePath: Dockerfile.backend
+    dockerfilePath: Dockerfile
     healthCheckPath: /actuator/health
     autoDeploy: true
     # (선택) 환경변수 예시
