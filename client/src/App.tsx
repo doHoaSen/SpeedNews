@@ -41,9 +41,22 @@ const SOURCES: Record<
     defaultCat: "latest",
   },
 };
-console.log('[VITE_API_URL]', import.meta.env.VITE_API_URL);
 
-export default function App({}: { initialItems?: News[] }) {
+// 링크 기준 중복 제거 유틸
+const dedupeByLink = (arr: News[]) => {
+  const seen = new Set<string>();
+  const out: News[] = [];
+  for (const n of arr) {
+    const key = n.link ?? "";
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(n);
+    }
+  }
+  return out;
+};
+
+export default function App({ initialItems = [] }: { initialItems?: News[] }) {
   const [source, setSource] = useState<SourceKey>(
     () => (localStorage.getItem("src") as SourceKey) || "hk"
   );
@@ -72,18 +85,26 @@ export default function App({}: { initialItems?: News[] }) {
     localStorage.setItem("view-mode", view);
   }, [view]);
 
-  // 데이터 로딩 (오류/라이브 상태 포함)
+  // 데이터 로딩 (오류 포함)
   const { items, error } = useFeed(feedKey);
 
+  // hk-all에서만 ColdStartGate의 초기 데이터와 병합(중복 제거)
+  const hydratedItems = useMemo(() => {
+    if (feedKey !== "hk-all") return items;
+    // useFeed가 아직 비어있으면 initialItems만 먼저 노출
+    if (!items || items.length === 0) return initialItems;
+    // 둘 다 있을 때 병합 + dedupe
+    return dedupeByLink([...initialItems, ...items]);
+  }, [feedKey, items, initialItems]);
+
+  // 검색 필터
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
-    if (!k) return items;
-    return items.filter((n) =>
-      [n.title, n.description ?? ""].some((t) =>
-        t?.toLowerCase().includes(k)
-      )
+    if (!k) return hydratedItems;
+    return hydratedItems.filter((n) =>
+      [n.title, n.description ?? ""].some((t) => t?.toLowerCase().includes(k))
     );
-  }, [items, q]);
+  }, [hydratedItems, q]);
 
   // 소스 변경 시 카테고리 기본값으로 리셋
   useEffect(() => {
@@ -92,20 +113,16 @@ export default function App({}: { initialItems?: News[] }) {
     }
   }, [source]); // eslint-disable-line
 
-  // 배너 노출 조건: "진짜 실패"일 때만(아직 아이템이 하나도 없고 error인 경우)
-  const showErrorBanner = error && items.length === 0;
+  // 배너 노출 조건: 아직 아무 아이템도 없고 error일 때만
+  const showErrorBanner = error && (items?.length ?? 0) === 0 && (initialItems?.length ?? 0) === 0;
 
   return (
     <div className="container">
       <header className="header">
         <div>
           <h1>SpeedNews</h1>
-          <p className="subtitle">
-            한국경제/연합뉴스 RSS를 실시간으로 모아보는 가벼운 피드
-          </p>
-          <p className="subtitle">
-            본 페이지는 개인 개발 학습용이며, 클릭 시 원문 기사로 이동합니다.
-          </p>
+        <p className="subtitle">한국경제/연합뉴스 RSS를 실시간으로 모아보는 가벼운 피드</p>
+        <p className="subtitle">본 페이지는 개인 개발 학습용이며, 클릭 시 원문 기사로 이동합니다.</p>
         </div>
 
         {/* 에러 배너 */}
@@ -126,9 +143,6 @@ export default function App({}: { initialItems?: News[] }) {
             서버 응답이 느리거나 실패했어요. 잠시 후 새로고침해 주세요.
           </div>
         )}
-
-        {/* 연결 상태(선택 표시) */}
-        {/* <small style={{opacity:.6}}>SSE: {live ? "connected" : "reconnecting..."}</small> */}
 
         {/* 1단 탭: 언론사 */}
         <div className="tabs">
