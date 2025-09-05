@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: speednews-staging        # 서비스 이름(중복 안 되게)
+    env: docker
+    rootDir: .
+    dockerfilePath: Dockerfile
+    healthCheckPath: /actuator/health
+    autoDeploy: true
+    # (선택) 환경변수 예시
+    envVars:
+      - key: TZ
+        value: Asia/Seoul
+      - key: SPRING_PROFILES_ACTIVE
+        value: staging

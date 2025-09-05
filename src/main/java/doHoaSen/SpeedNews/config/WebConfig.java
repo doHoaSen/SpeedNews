@@ -8,10 +8,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override public void addCorsMappings(CorsRegistry reg) {
         reg.addMapping("/api/**")
                 .allowedOrigins(
-                        "https://fantastic-kashata-d47d49.netlify.app",
-                        "http://localhost:5173",           // 로컬 개발용
-                        "http://127.0.0.1:5173",           // 로컬 개발용
-                        "https://speednews.it.kr",         // 최종 도메인
+                        "http://localhost:5173",
+                        "https://fantastic-kashata-d47d49.netlify.app",            // 프로덕션(네틀리파이 서브도메인)
+                        "https://develop--fantastic-kashata-d47d49.netlify.app",   // 브랜치 배포(정답)
+                        "https://speednews.it.kr",
                         "https://www.speednews.it.kr"
                 )
                 .allowedMethods("*");

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { API } from "./config";
+import {apiUrl} from "./config.ts";
 
 export type News = {
   source: string; category: string; title: string; link: string;
@@ -17,7 +17,9 @@ useEffect(() => {
   let cancelled = false;
   (async () => {
     try {
-      const r = await fetch(`${API}/news?category=${encodeURIComponent(category)}`);
+      const r = await fetch(
+  apiUrl(`/news?category=${encodeURIComponent(category)}`)
+);
       if (!r.ok) throw new Error(`REST ${r.status}`);
       const data: News[] = await r.json();
       if (!cancelled) {
@@ -37,7 +39,9 @@ useEffect(() => {
   // 2) 실시간 (SSE)
   useEffect(() => {
   // ⬇︎ 프록시(/api/stream) 대신 직접 백엔드로
-  const es = new EventSource(`${API}/stream?category=${encodeURIComponent(category)}`);
+  const es = new EventSource(
+  apiUrl(`/stream?category=${encodeURIComponent(category)}`)
+);
   esRef.current = es;
 
   es.onopen = () => {setLive(true); setError(false); };
