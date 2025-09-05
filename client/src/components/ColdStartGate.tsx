@@ -117,11 +117,6 @@ export default function ColdStartGate({
   if (!warming) {
     return (
       <>
-        {failed && (
-          <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-3 py-1 rounded">
-            서버 응답이 느리거나 실패했어요. 새로고침으로 다시 시도해 주세요.
-          </div>
-        )}
         {children(initItems)}
       </>
     );
