@@ -1,8 +1,8 @@
+// src/components/ColdStartGate.tsx
 import { useEffect, useRef, useState } from "react";
 import type { News } from "../api/useFeed";
 import CircularProgress from "./CircularProgress";
 
-// 부드러운 진행률 곡선 (0~1 입력 → 0~1 출력)
 function easeInOutCubic(x: number) {
   return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
@@ -12,39 +12,35 @@ export default function ColdStartGate({
 }: {
   children: (initItems: News[]) => React.ReactNode;
 }) {
-  const [warming, setWarming] = useState(true);   // 게이트 on/off
-  const [visible, setVisible] = useState(false);  // 로더 표시 여부(지연 후 표시)
-  const [failed, setFailed] = useState(false);
+  const [warming, setWarming] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [, setFailed] = useState(false);   // ✅ 첫 요소 버림(에러 배너 안 씀)
   const [initItems, setInitItems] = useState<News[]>([]);
   const [progress, setProgress] = useState(0);
 
-  // ===== 튜닝 파라미터 =====
-  const showDelayMs   = 300;   // 이 시간 이전에 끝나면 로더 아예 안 보여줌(깜빡임 방지)
-  const minVisibleMs  = 900;   // 로더가 일단 뜨면 최소 표시 시간을 보장
-  const completionHoldMs = 650;// 100%가 된 뒤 유지(“완료” 맛)
-  const maxDurationMs = 30000; // 안전 타임아웃(30초)
-  // ========================
+  const showDelayMs = 300;
+  const minVisibleMs = 900;
+  const completionHoldMs = 650;
+  const maxDurationMs = 30000;
 
   const startedAtRef = useRef<number>(0);
   const visibleAtRef = useRef<number>(0);
-  const intervalRef  = useRef<number | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const showTimerRef = useRef<number | null>(null);
-  const endTimerRef  = useRef<number | null>(null);
+  const endTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     startedAtRef.current = Date.now();
 
-    // 1) 진행률 타이머 (Easing + 95% 캡)
     intervalRef.current = window.setInterval(() => {
       const elapsed = Date.now() - startedAtRef.current;
       const t = Math.min(1, elapsed / maxDurationMs);
-      const eased = easeInOutCubic(t);         // 0→1 사이 부드러운 증가
+      const eased = easeInOutCubic(t);
       const pct = Math.min(95, Math.floor(eased * 100));
       setProgress(pct);
     }, 120);
 
-    // 2) 지연 후에 로더 표시(깜빡임 방지)
     showTimerRef.current = window.setTimeout(() => {
       if (!cancelled) {
         setVisible(true);
@@ -52,7 +48,6 @@ export default function ColdStartGate({
       }
     }, showDelayMs);
 
-    // 3) 실제 데이터 요청
     (async () => {
       try {
         const ctl = new AbortController();
@@ -69,23 +64,17 @@ export default function ColdStartGate({
           const data = await res.json();
           setInitItems(data);
 
-          // 진행률 100% 고정 및 타이머 정리
           if (intervalRef.current) {
             window.clearInterval(intervalRef.current);
             intervalRef.current = null;
           }
           setProgress(100);
 
-          // 로더가 이미 떠 있다면: 최소 표시시간 + 완료 홀드 보장
           const now = Date.now();
           const visibleFor = visible ? now - visibleAtRef.current : 0;
           const needMin = visible ? Math.max(0, minVisibleMs - visibleFor) : 0;
-
           const totalHold = needMin + completionHoldMs;
 
-          // 로더를 아직 안 띄웠는데 응답이 끝난 경우:
-          // - showDelay 전에 끝났다면 로더를 아예 안 보여주고 즉시 종료
-          // - showDelay를 넘긴 직후라면 totalHold로 아주 짧게 100%를 보여주고 종료
           endTimerRef.current = window.setTimeout(() => {
             setWarming(false);
           }, totalHold);
@@ -98,12 +87,11 @@ export default function ColdStartGate({
           window.clearInterval(intervalRef.current);
           intervalRef.current = null;
         }
-        setFailed(true);
+        setFailed(true);       // 내부 상태만 기록(배너는 없음)
         setWarming(false);
       }
     })();
 
-    // 정리
     return () => {
       cancelled = true;
       if (intervalRef.current) window.clearInterval(intervalRef.current);
@@ -113,31 +101,24 @@ export default function ColdStartGate({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 게이트 종료 → 실제 앱 렌더
   if (!warming) {
-    return (
-      <>
-        {children(initItems)}
-      </>
-    );
+    return <>{children(initItems)}</>;
   }
 
-  // 게이트 중인데 아직 표시 지연 시간 이전 → 아무것도 안 보여줌(깜빡임 방지)
   if (!visible) return null;
 
-  // 로더 표시
   return (
     <div
       style={{
         position: "fixed",
-        top: 0, left: 0, right: 0, bottom: 0,   // 뷰포트 꽉 채우기
-        zIndex: 9999,                           // 위로 올리기
-        background: "#fff",                     // 필요 없으면 지워도 됨 (반투명 원하면 'rgba(255,255,255,.85)')
+        top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 9999,
+        background: "#fff",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",                   // 가로 중앙
-        justifyContent: "center",               // 세로 중앙
-        gap: "12px",                            // 문구-로더 간격
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "12px",
         padding: "16px",
         textAlign: "center",
       }}
