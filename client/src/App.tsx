@@ -41,7 +41,6 @@ const SOURCES: Record<
     defaultCat: "latest",
   },
 };
-console.log('[VITE_API_URL]', import.meta.env.VITE_API_URL);
 
 // 링크 기준 중복 제거 유틸
 const dedupeByLink = (arr: News[]) => {
