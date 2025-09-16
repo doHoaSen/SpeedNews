@@ -3,11 +3,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import ColdStartGate from "./components/ColdStartGate";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ColdStartGate>
-      {(initItems) => <App initialItems={initItems} />}
+      {(init) => <App initialItems={init} />}
     </ColdStartGate>
   </React.StrictMode>
 );

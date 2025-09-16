@@ -1,6 +1,7 @@
 package doHoaSen.SpeedNews.service;
 
 import doHoaSen.SpeedNews.config.NewsProperties;
+import doHoaSen.SpeedNews.dto.CacheKpiDto;
 import doHoaSen.SpeedNews.dto.NewsItem;
 import com.github.benmanes.caffeine.cache.*;
 import com.rometools.rome.feed.synd.*;
@@ -13,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Duration;
 import java.util.*;
+
+import com.github.benmanes.caffeine.cache.stats.CacheStats;
 
 @Service
 public class RssService {
@@ -71,5 +74,22 @@ public class RssService {
 
     public Set<String> categories() {   // ✅ public
         return feeds.keySet();
+    }
+
+    public CacheKpiDto snapshotKpi() {
+        CacheStats s = cache.stats();
+        long loads = s.loadSuccessCount();           // 캐시 미스 후 실제 로드 성공 건수
+        double avgMissMs = (loads == 0) ? 0.0 : (s.totalLoadTime() / 1_000_000.0) / loads;
+        double timeSavedMs = s.hitCount() * avgMissMs;
+        return new CacheKpiDto(
+                s.hitRate(),
+                s.hitCount(),
+                s.missCount(),
+                s.loadSuccessCount(),
+                s.loadFailureCount(),
+                s.evictionCount(),
+                avgMissMs,
+                timeSavedMs
+        );
     }
 }
