@@ -14,7 +14,7 @@ public class CacheStatsLogger {
     private final RssService rss;
 
     // 1분마다 KPI 로그 (원하면 주기 조절)
-    @Scheduled(fixedDelay = 30_000)
+    @Scheduled(fixedDelay = 60_000)
     public void print() {
         var s = rss.snapshotKpi();
         log.info("[cacheKPI] hitRate={} hits={} misses={} loadOk={} loadErr={} evict={} avgMissMs={} savedMs={}",
