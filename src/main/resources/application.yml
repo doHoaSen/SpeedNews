@@ -20,6 +20,8 @@ management:
         enabled: true
 
 logging:
+  level:
+    doHoaSen.SpeedNews: INFO
   pattern:
     console: "%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
 

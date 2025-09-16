@@ -14,13 +14,17 @@ public class CacheStatsLogger {
     private final RssService rss;
 
     // 1분마다 KPI 로그 (원하면 주기 조절)
-    @Scheduled(fixedRate = 60_000)
-    public void logKpi() {
-        var k = rss.snapshotKpi(); // ← RssService에 앞서 만든 snapshotKpi() 사용
-        log.info("[cacheKPI] hitRate={} hits={} misses={} avgMissMs={} savedMs={}",
-                String.format("%.3f", k.hitRate()),
-                k.hitCount(), k.missCount(),
-                String.format("%.1f", k.avgMissMillis()),
-                String.format("%.0f", k.timeSavedMillis()));
+    @Scheduled(fixedDelay = 30_000)
+    public void print() {
+        var s = rss.snapshotKpi();
+        log.info("[cacheKPI] hitRate={} hits={} misses={} loadOk={} loadErr={} evict={} avgMissMs={} savedMs={}",
+                String.format("%.3f", s.hitRate()),
+                s.hitCount(),
+                s.missCount(),
+                s.loadSuccessCount(),
+                s.loadFailureCount(),
+                s.evictionCount(),
+                String.format("%.1f", s.avgMissMillis()),
+                String.format("%.0f", s.timeSavedMillis()));
     }
 }

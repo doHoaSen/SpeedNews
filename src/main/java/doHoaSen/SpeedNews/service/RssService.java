@@ -23,6 +23,7 @@ public class RssService {
     private final Cache<String, List<NewsItem>> cache = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(60))
             .maximumSize(100)
+            .recordStats()
             .build();
 
     public RssService(NewsProperties props) {              // ✅ 안전하게 주입
@@ -75,6 +76,7 @@ public class RssService {
     public Set<String> categories() {   // ✅ public
         return feeds.keySet();
     }
+
 
     public CacheKpiDto snapshotKpi() {
         CacheStats s = cache.stats();
