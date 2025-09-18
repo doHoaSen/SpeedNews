@@ -22,7 +22,7 @@ public class RssService {
     private final Map<String,String> feeds;
     private final Cache<String, List<NewsItem>> cache = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(60))
-            .maximumSize(100)
+            .maximumSize(300)
             .recordStats()
             .build();
 
