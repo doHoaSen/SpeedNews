@@ -94,4 +94,8 @@ public class RssService {
                 timeSavedMs
         );
     }
+
+    public CacheStats snapshotRawStats() {
+        return cache.stats();
+    }
 }
