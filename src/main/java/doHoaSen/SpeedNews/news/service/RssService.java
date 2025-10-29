@@ -1,13 +1,12 @@
-package doHoaSen.SpeedNews.service;
+package doHoaSen.SpeedNews.news.service;
 
 import doHoaSen.SpeedNews.config.NewsProperties;
-import doHoaSen.SpeedNews.dto.CacheKpiDto;
-import doHoaSen.SpeedNews.dto.NewsItem;
+import doHoaSen.SpeedNews.news.dto.CacheKpiDto;
+import doHoaSen.SpeedNews.news.domain.NewsItem;
 import com.github.benmanes.caffeine.cache.*;
 import com.rometools.rome.feed.synd.*;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;

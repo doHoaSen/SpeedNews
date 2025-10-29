@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.auth;
+package doHoaSen.SpeedNews.auth.support;
 
 import java.util.regex.Pattern;
 

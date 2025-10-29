@@ -1,4 +1,5 @@
 package doHoaSen.SpeedNews.common.mail;
 
-public class Mailer {
+public interface Mailer {
+    void send(String to, String subject, String content);
 }

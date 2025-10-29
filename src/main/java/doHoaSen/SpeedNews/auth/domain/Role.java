@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.user;
+package doHoaSen.SpeedNews.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

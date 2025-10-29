@@ -1,7 +1,7 @@
-package doHoaSen.SpeedNews.controller;
+package doHoaSen.SpeedNews.news.controller;
 
-import doHoaSen.SpeedNews.dto.NewsItem;
-import doHoaSen.SpeedNews.service.RssService;
+import doHoaSen.SpeedNews.news.domain.NewsItem;
+import doHoaSen.SpeedNews.news.service.RssService;
 import doHoaSen.SpeedNews.sse.SseHub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

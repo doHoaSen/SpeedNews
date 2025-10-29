@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${JDBC_URL}     # 예: jdbc:postgresql://HOST:PORT/DB?sslmode=require
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+logging:
+  level:
+    org.hibernate.SQL: info     # 운영에선 너무 자세한 SQL 로그는 지양

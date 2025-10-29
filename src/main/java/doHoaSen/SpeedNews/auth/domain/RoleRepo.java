@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.user;
+package doHoaSen.SpeedNews.auth.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;

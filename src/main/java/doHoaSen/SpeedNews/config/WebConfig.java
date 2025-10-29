@@ -6,12 +6,44 @@ import org.springframework.web.servlet.config.annotation.*;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Override public void addCorsMappings(CorsRegistry reg) {
+        // 1) 기존 /api/** 그대로 유지
         reg.addMapping("/api/**")
                 .allowedOrigins(
                         "https://fantastic-kashata-d47d49.netlify.app",
-                        "http://localhost:5173",           // 로컬 개발용
-                        "http://127.0.0.1:5173",           // 로컬 개발용
-                        "https://speednews.it.kr",         // 최종 도메인
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://speednews.it.kr",
+                        "https://www.speednews.it.kr"
+                )
+                .allowedMethods("*");
+
+        // 2) 추가: /auth/**, /news/**, /stream/** 도 허용
+        reg.addMapping("/auth/**")
+                .allowedOrigins(
+                        "https://fantastic-kashata-d47d49.netlify.app",
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://speednews.it.kr",
+                        "https://www.speednews.it.kr"
+                )
+                .allowedMethods("*");
+
+        reg.addMapping("/news/**")
+                .allowedOrigins(
+                        "https://fantastic-kashata-d47d49.netlify.app",
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://speednews.it.kr",
+                        "https://www.speednews.it.kr"
+                )
+                .allowedMethods("*");
+
+        reg.addMapping("/stream/**")
+                .allowedOrigins(
+                        "https://fantastic-kashata-d47d49.netlify.app",
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://speednews.it.kr",
                         "https://www.speednews.it.kr"
                 )
                 .allowedMethods("*");

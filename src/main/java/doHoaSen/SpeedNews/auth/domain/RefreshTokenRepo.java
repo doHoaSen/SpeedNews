@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.auth;
+package doHoaSen.SpeedNews.auth.domain;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +13,7 @@ public interface RefreshTokenRepo extends JpaRepository<RefreshToken, Long> {
     @Modifying
     @Query("UPDATE RefreshToken r SET r.revoked = true WHERE r.family = :family")
     void revokeFamily(@Param("family") String family);
+
+    // 유저의 모든 리프레시 토큰 삭제
+    void deleteAllByUserId(Long userId);
 }

@@ -1,4 +1,3 @@
 package doHoaSen.SpeedNews.auth.event;
 
-public class SendVerificationEmailEvent {
-}
+public record SendVerificationEmailEvent(Long userId) { }

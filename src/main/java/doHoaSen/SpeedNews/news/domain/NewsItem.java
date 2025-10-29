@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.dto;
+package doHoaSen.SpeedNews.news.domain;
 
 public record NewsItem (
     String source,

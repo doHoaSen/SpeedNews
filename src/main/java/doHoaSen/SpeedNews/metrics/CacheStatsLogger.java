@@ -1,7 +1,7 @@
 package doHoaSen.SpeedNews.metrics;
 
 import com.github.benmanes.caffeine.cache.stats.CacheStats;
-import doHoaSen.SpeedNews.service.RssService;
+import doHoaSen.SpeedNews.news.service.RssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

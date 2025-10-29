@@ -1,6 +1,6 @@
-package doHoaSen.SpeedNews.service;
+package doHoaSen.SpeedNews.news.service;
 
-import doHoaSen.SpeedNews.dto.NewsItem;
+import doHoaSen.SpeedNews.news.domain.NewsItem;
 import doHoaSen.SpeedNews.sse.SseHub;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

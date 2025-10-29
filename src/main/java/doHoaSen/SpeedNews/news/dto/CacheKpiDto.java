@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.dto;
+package doHoaSen.SpeedNews.news.dto;
 
 public record CacheKpiDto(
         double hitRate,

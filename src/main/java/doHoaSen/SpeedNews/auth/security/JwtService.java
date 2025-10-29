@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.auth;
+package doHoaSen.SpeedNews.auth.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -42,6 +42,18 @@ public class JwtService {
         return JWT.create().withIssuer(issuer).withSubject(String.valueOf(uid))
                 .withClaim("typ", "refresh").withClaim("family", family)
                 .withIssuedAt(new Date(now)).withExpiresAt(new Date(now + refreshMs))
+                .sign(alg);
+    }
+
+    public String createEmailToken(String email) {
+        long now = System.currentTimeMillis();
+        long exp = now + (30 * 60_000L); // 30분 유효
+        return JWT.create()
+                .withIssuer(issuer)
+                .withSubject(email)
+                .withClaim("typ", "email")
+                .withIssuedAt(new Date(now))
+                .withExpiresAt(new Date(exp))
                 .sign(alg);
     }
 
