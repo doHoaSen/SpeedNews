@@ -1,0 +1,23 @@
+.authbar {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: 8px; padding: 6px 8px; border-bottom: 1px solid #eee; margin-bottom: 12px;
+}
+.auth-right { display: flex; gap: 8px; align-items: center; }
+.muted { color: #666; font-size: 14px; }
+.btn { padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
+.btn:hover { background: #f5f5f5; }
+.btn.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+.btn.primary:hover { background: #1e4fd6; }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  display: flex; align-items: center; justify-content: center; z-index: 50;
+}
+.modal {
+  width: 320px; background: #fff; border-radius: 10px; padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.modal h3 { margin: 0 0 12px; }
+.input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.hint { color: #777; font-size: 12px; margin-top: 6px; }

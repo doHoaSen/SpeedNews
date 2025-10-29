@@ -1,5 +1,5 @@
 // src/components/SquareNewsCard.tsx
-import type { News } from "../api/useFeed";
+import type { News } from "../../news/api/useFeed";
 
 const catEmoji: Record<string, string> = {
   economy: "📈", politics: "🏛️", it: "💻", finance: "💹",
