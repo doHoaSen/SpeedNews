@@ -43,6 +43,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://fantastic-kashata-d47d49.netlify.app",
                         "http://localhost:5173",
                         "http://127.0.0.1:5173",
+                        "https://fantastic-kashata-d47d49.netlify.app",
+                        "https://develop--fantastic-kashata-d47d49.netlify.app",
                         "https://speednews.it.kr",
                         "https://www.speednews.it.kr"
                 )
