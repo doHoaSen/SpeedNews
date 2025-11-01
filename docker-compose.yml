@@ -12,7 +12,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     image: speednews/backend:local
     restart: always
     # ❌ ports 제거 (직접 노출하지 않고 proxy를 통해서만 접근)
