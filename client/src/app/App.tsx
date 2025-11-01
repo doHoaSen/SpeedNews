@@ -79,7 +79,7 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
   useEffect(() => { localStorage.setItem("cat", cat); }, [cat]);
   useEffect(() => { localStorage.setItem("view-mode", view); }, [view]);
 
-  const { items, error } = useFeed(feedKey);
+  const { items } = useFeed(feedKey);
 
   const hydratedItems = useMemo(() => {
     if (feedKey !== "hk-all") return items;
