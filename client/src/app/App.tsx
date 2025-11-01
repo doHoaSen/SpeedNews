@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import {Link} from "react-router-dom";
+//import {Link} from "react-router-dom";
 import { useFeed } from "../features/news/api/useFeed";
 import type { News } from "../features/news/api/useFeed";
 import { SquareNewsCard } from "../features/news/ui/SquareNewsCard";
 import { ListNewsCard } from "../features/news/ui/ListNewsCard";
 
 import "./styles/index.css";
-import AuthBar from "../features/auth/ui/AuthBar";
+//import AuthBar from "../features/auth/ui/AuthBar";
 
 type SourceKey = "hk" | "yna";
 type ViewMode = "tile" | "list";
@@ -67,7 +67,7 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
     return localStorage.getItem("cat") || SOURCES[initSrc].defaultCat;
   });
   const [q, setQ] = useState("");
-  const [view, setView] = useState<ViewMode>(
+  const [view] = useState<ViewMode>(
     () => (localStorage.getItem("view-mode") as ViewMode) || "tile"
   );
 
@@ -101,10 +101,10 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
     }
   }, [source]); // eslint-disable-line
 
-  const showErrorBanner =
-    error &&
-    (items?.length ?? 0) === 0 &&
-    (initialItems?.length ?? 0) === 0;
+  // const showErrorBanner =
+  //   error &&
+  //   (items?.length ?? 0) === 0 &&
+  //   (initialItems?.length ?? 0) === 0;
 
   return (
     <>

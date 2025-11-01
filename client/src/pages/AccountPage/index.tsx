@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+//import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { AuthApi } from '../../features/auth/api/auth';
-import type { MeRes } from '../../features/auth/api/auth';
+//import { AuthApi } from '../../features/auth/api/auth';
+//import type { MeRes } from '../../features/auth/api/auth';
 import { useAuth } from "../../state/AuthState";
 
 export default function AccountPage() {

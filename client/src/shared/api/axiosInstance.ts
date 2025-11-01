@@ -74,5 +74,8 @@ export const apiGet = <T>(path: string, params?: any): Promise<T> =>
 export const apiPost = <T>(path: string, body?: any): Promise<T> =>
   http.post<T>(apiUrl(path), body).then(r => r.data);
 
+export const apiDelete = <T>(path: string, data?: any) => 
+  http.delete<T>(path, {data});
+
 export const api = http;
 export default http;

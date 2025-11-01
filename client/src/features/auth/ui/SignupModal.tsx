@@ -8,7 +8,7 @@ export default function SignupModal({ open, onClose }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
-  const [phoneProof, setPhoneProof] = useState('');
+  const [name] = useState('');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
 
@@ -20,39 +20,19 @@ export default function SignupModal({ open, onClose }: Props) {
   const [busy, setBusy] = useState(false);
   if (!open) return null;
 
-  const requestOtp = async () => {
-    try {
-      setBusy(true);
-      await AuthApi.requestPhoneOtp(phone);
-      alert('OTP 전송됨 (개발 환경은 서버 로그 확인)');
-      setStep(2);
-    } catch (e: any) {
-      alert('OTP 전송 실패: ' + (e?.response?.data?.error ?? e?.message ?? '알 수 없는 오류'));
-    } finally { setBusy(false); }
-  };
+ 
 
-  const verifyOtp = async () => {
-    try {
-      setBusy(true);
-      const data = await AuthApi.verifyPhoneOtp(phone, otp); // { phoneProof }
-      setPhoneProof(data.phoneProof);
-      alert('휴대폰 인증 완료');
-      setStep(3);
-    } catch (e: any) {
-      alert('OTP 검증 실패: ' + (e?.response?.data?.error ?? e?.message ?? '알 수 없는 오류'));
-    } finally { setBusy(false); }
-  };
+  
 
   const passwordOk = /^(?=.*[a-z])(?=.*[A-Z])(?=.*(\d|\W)).{6,}$/.test(pw);
-  const canRegister = !!email && !!pw && !!phoneProof && passwordOk && termsAgreed && privacyAgreed;
+  const canRegister = !!email && !!pw && passwordOk && termsAgreed && privacyAgreed;
 
   const register = async () => {
     try {
       if (!canRegister) { alert('필수 항목을 확인해 주세요.'); return; }
       setBusy(true);
       await AuthApi.register({
-        email, password: pw, phone, phoneProof,
-        termsAgreed, privacyAgreed, marketingAgreed
+        name, email, password: pw, phone, 
       });
       alert('회원가입 완료! 이메일에서 인증 링크를 열어 주세요.');
       onClose();
@@ -74,9 +54,7 @@ export default function SignupModal({ open, onClose }: Props) {
                    value={phone} onChange={(e)=>setPhone(e.target.value)} />
             <div className="modal-actions">
               <button className="btn" onClick={closeIfIdle} disabled={busy}>취소</button>
-              <button className="btn primary" onClick={requestOtp} disabled={busy || !phone}>
-                {busy ? '전송 중…' : 'OTP 요청'}
-              </button>
+              
             </div>
           </>
         )}
@@ -88,9 +66,7 @@ export default function SignupModal({ open, onClose }: Props) {
                    value={otp} onChange={(e)=>setOtp(e.target.value)} />
             <div className="modal-actions">
               <button className="btn" onClick={()=>setStep(1)} disabled={busy}>이전</button>
-              <button className="btn primary" onClick={verifyOtp} disabled={busy || !otp}>
-                {busy ? '확인 중…' : 'OTP 검증'}
-              </button>
+
             </div>
           </>
         )}

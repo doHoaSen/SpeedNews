@@ -27,8 +27,6 @@ export default function SignupPage() {
         email,
         password: pw,
         phone,
-        termsAgreed,
-        privacyAgreed,
       });
       alert("회원가입 완료! 이메일 인증 후 로그인해주세요.");
       nav("/login");

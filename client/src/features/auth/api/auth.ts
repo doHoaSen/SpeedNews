@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from '../../../shared/api/axiosInstance';
+import { apiGet, apiPost, apiDelete } from '../../../shared/api/axiosInstance';
 
 export type TokenRes = { 
   access: string; 
@@ -14,33 +14,39 @@ export type MeRes = {
 };
 
 export const AuthApi = {
-  
-  register: (params: { name: string; email: string; password: string; phone?: string; }) =>
-    apiPost<void>('/auth/register', params),
+  /** 회원가입 */
+  register: (params: { name: string; email: string; password: string; phone?: string }) =>
+    apiPost<void>("/api/auth/register", params),
 
+  /** 이메일 인증 코드 입력 */
   verifyEmail: (token: string) =>
-    apiPost<void>('/auth/verify-email', { token }),
+    apiPost<void>("/api/auth/verify-email", { token }),
 
+  /** 이메일 인증 재발송 */
   resendVerification: (email: string) =>
-  apiPost<void>('/auth/resend-verification', { email }),
+    apiPost<void>("/api/auth/resend-verification", { email }),
 
-
+  /** 로그인 */
   login: (email: string, password: string) =>
-    apiPost<TokenRes>('/auth/login', { email, password }),
+    apiPost<TokenRes>("/api/auth/login", { email, password }),
 
+  /** 토큰 리프레시 */
   refresh: (refresh: string) =>
-    apiPost<TokenRes>('/auth/refresh', { refresh }),
+    apiPost<TokenRes>("/api/auth/refresh", { refresh }),
 
-  me: () => apiGet<MeRes>('/auth/me'),
+  /** 내 정보 */
+  me: () => apiGet<MeRes>("/api/auth/me"),
 
+  /** 비밀번호 재설정 요청 */
   requestReset: (email: string) =>
-  apiPost<void>("/auth/request-reset", { email }),
+    apiPost<void>("/api/auth/request-reset", { email }),
 
-resetPassword: (token: string, newPassword: string) =>
-  apiPost<void>("/auth/reset-password", { token, newPassword }),
+  /** 비밀번호 재설정 */
+  resetPassword: (token: string, newPassword: string) =>
+    apiPost<void>("/api/auth/reset-password", { token, newPassword }),
 
-deleteAccount: (password: string) =>
-  apiPost<void>("/auth/delete", {password}),
-
-
+  /** 회원 탈퇴 */
+  deleteAccount: (password: string) =>
+    apiDelete<void>("/api/auth/delete", { password }),
+  
 };
