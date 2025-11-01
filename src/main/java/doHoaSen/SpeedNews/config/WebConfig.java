@@ -45,6 +45,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://127.0.0.1:5173",
                         "https://fantastic-kashata-d47d49.netlify.app",
                         "https://develop--fantastic-kashata-d47d49.netlify.app",
+                        "http://localhost:5173",
+                        "https://fantastic-kashata-d47d49.netlify.app",            // 프로덕션(네틀리파이 서브도메인)
+                        "https://develop--fantastic-kashata-d47d49.netlify.app",   // 브랜치 배포(정답)
                         "https://speednews.it.kr",
                         "https://www.speednews.it.kr"
                 )
