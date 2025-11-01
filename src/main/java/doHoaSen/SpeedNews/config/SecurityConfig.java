@@ -21,19 +21,19 @@ public class SecurityConfig {
                         // actuator
                         .requestMatchers("/actuator/**", "/api/actuator/**").permitAll()
 
-                        // ✅ 회원가입/로그인/이메일 인증/비밀번호 관련 API
+                        // 회원가입/로그인/이메일 인증/비밀번호 관련 API
                         .requestMatchers(
                                 "/auth/**",
                                 "/api/auth/**"
                         ).permitAll()
 
-                        // ✅ 프론트엔드 정적 파일 & 라우트 페이지 허용
+                        // 프론트엔드 정적 파일 & 라우트 페이지 허용
                         .requestMatchers(
                                 "/", "/index.html", "/favicon.ico",
                                 "/static/**", "/assets/**",
                                 "/manifest.json", "/logo192.png", "/logo512.png",
                                 "/reset-password/**", "/verify-email/**",
-                                "/**/*.js", "/**/*.css"
+                                "/*.js", "/*.css"
                         ).permitAll()
 
                         // 뉴스 스트림 공개
