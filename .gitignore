@@ -38,3 +38,12 @@ out/
 
 # ColdStartGate 실제 구현 제외
 client/src/ColdStartGate.tsx
+
+# Environment
+.env
+*.env
+
+# Spring boot
+*.log
+*.tmp
+target/
