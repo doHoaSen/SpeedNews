@@ -121,12 +121,12 @@ public class AuthController {
     }
 
     /** 비밀번호 재설정 링크 클릭 */
-    @GetMapping("/verify-reset")
+    @GetMapping("/verify-reset-pw")
     public ResponseEntity<Void> verifyResetByLink(@RequestParam("token") String token) {
         // 토큰 검증 (유효/만료/형식 체크)
         authService.verifyResetToken(token);
 
-        // ✅ 검증 통과 시 React 페이지로 리다이렉트
+        // 검증 통과 시 React 페이지로 리다이렉트
         String redirectUrl = "http://localhost:5173/reset-password?token=" + token;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", redirectUrl)

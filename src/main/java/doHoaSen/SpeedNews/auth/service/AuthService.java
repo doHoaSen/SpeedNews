@@ -179,7 +179,7 @@ public class AuthService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "등록되지 않은 이메일입니다."));
 
         String token = jwt.createEmailToken(email); // ✅ 30분짜리 토큰 생성
-        String link = "http://localhost:8080/api/auth/verify-reset?token=" + token;
+        String link = "http://localhost:8080/api/auth/verify-reset-pw?token=" + token;
 
         String html = """
   <div style="font-family:sans-serif;max-width:500px;margin:auto;padding:20px;border:1px solid #eee;">
