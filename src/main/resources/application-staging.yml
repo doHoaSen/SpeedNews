@@ -42,7 +42,7 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
+            enable: false
 
   servlet:
     multipart:
