@@ -59,3 +59,8 @@ logging:
     root: info
     org.springframework.web: info
     org.hibernate.SQL: warn
+
+management:
+  health:
+    mail:
+      enabled: false
