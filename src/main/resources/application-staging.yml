@@ -67,4 +67,4 @@ management:
 
 security:
   jwt:
-    secret: ${SECURITY_JWT_SECRET:${security.jwt.secret}}
+    secret: ${SECURITY_JWT_SECRET}
