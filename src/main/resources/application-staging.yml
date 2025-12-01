@@ -63,7 +63,14 @@ logging:
 management:
   health:
     mail:
-      enabled: false
+      enabled: false  # 메일 헬스체크 비활성화
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
 
 security:
   jwt:
