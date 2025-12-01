@@ -14,6 +14,10 @@ services:
       context: .
       dockerfile: Dockerfile
     image: speednews/backend:local
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pg:5433/speednews
+      - SPRING_DATASOURCE_USERNAME=speednews
+      - SPRING_DATASOURCE_PASSWORD=sbtm99!
     restart: always
     # ❌ ports 제거 (직접 노출하지 않고 proxy를 통해서만 접근)
     # DB 안 쓰면 env_file 도 생략 가능
@@ -29,3 +33,4 @@ services:
       - frontend
       - backend
     restart: always
+
