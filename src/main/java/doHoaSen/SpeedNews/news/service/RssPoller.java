@@ -23,7 +23,7 @@ public class RssPoller {
     // 카테고리별로 본 링크 저장 (간단 중복 방지)
     private final Map<String, Set<String>> seen = new ConcurrentHashMap<>();
 
-    @Scheduled(fixedDelay = 30_000)
+    @Scheduled(fixedDelay = 300_000)
     public void tick() {
         // ✅ Null 문제 회피: 빈 컬렉션 방어
         Set<String> cats = Optional.ofNullable(rss.categories()).orElseGet(Collections::emptySet);
@@ -34,7 +34,8 @@ public class RssPoller {
             // LRU 비슷한 트림이 되는 LinkedHashMap 백킹 Set
             Set<String> bucket = seen.computeIfAbsent(cat, k ->
                     Collections.newSetFromMap(new LinkedHashMap<String, Boolean>(256, 0.75f, true) {
-                        @Override protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
+                        @Override
+                        protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
                             return size() > 800;
                         }
                     })
