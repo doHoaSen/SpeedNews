@@ -25,14 +25,18 @@ public class RssService {
             .recordStats()
             .build();
 
-    public RssService(NewsProperties props) {              // ✅ 안전하게 주입
+    public RssService(NewsProperties props) {              // 안전하게 주입
         this.feeds = Objects.requireNonNull(props.getFeeds(), "news.feeds must not be null");
     }
 
-    public List<NewsItem> fetch(String category) {  // ✅ public
+    public List<NewsItem> fetch(String category) {
         String key = feeds.containsKey(category) ? category : "all";
-        return cache.get(key, k -> readFeed(feeds.get(key), k));
+        return cache.get(key, k -> {
+            List<NewsItem> list = readFeed(feeds.get(key), k);
+            return list == null ? cache.getIfPresent(key) : list;
+        });
     }
+
 
     private List<NewsItem> readFeed(String url, String category) {
         HttpURLConnection conn = null;
@@ -64,8 +68,9 @@ public class RssService {
                 return list;
             }
         } catch (Exception ex) {
-            ex.printStackTrace(); // 원인 로그 확인
-            return List.of();
+            // 로그만 찍고 null을 반환
+            //log.error("[RSS] Failed to load {} -> {}", url, ex.getMessage());
+            return null;
         } finally {
             if (conn != null) conn.disconnect();
         }
