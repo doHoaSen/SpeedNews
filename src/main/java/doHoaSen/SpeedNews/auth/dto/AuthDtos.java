@@ -22,12 +22,7 @@ public class AuthDtos {
                     message = "비밀번호는 6자 이상이며, 문자와 숫자/기호를 포함해야 합니다"
             )
             String password,
-            @NotBlank String phone,
-
-            // ✅ 약관 동의
-            @AssertTrue(message = "이용약관 동의가 필요합니다") boolean termsAgreed,
-            @AssertTrue(message = "개인정보 처리방침 동의가 필요합니다") boolean privacyAgreed,
-            boolean marketingAgreed
+            @NotBlank String phone
     ) {}
 
     public record LoginReq(

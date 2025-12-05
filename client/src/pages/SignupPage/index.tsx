@@ -7,17 +7,12 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [phone, setPhone] = useState("");
-  const [termsAgreed, setTermsAgreed] = useState(false);
-  const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   const register = async () => {
     if (!name || !email || !pw || !phone) {
       return alert("모든 필드를 입력하세요.");
-    }
-    if (!termsAgreed || !privacyAgreed) {
-      return alert("이용약관 및 개인정보 처리방침에 동의해야 합니다.");
     }
 
     try {
@@ -77,26 +72,6 @@ export default function SignupPage() {
         onChange={(e) => setPhone(e.target.value)}
         required
       />
-
-      <div className="mt-4 space-y-2 text-sm">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={termsAgreed}
-            onChange={(e) => setTermsAgreed(e.target.checked)}
-          />
-          이용약관에 동의합니다
-        </label>
-
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={privacyAgreed}
-            onChange={(e) => setPrivacyAgreed(e.target.checked)}
-          />
-          개인정보 처리방침에 동의합니다
-        </label>
-      </div>
 
       <button
         className="bg-blue-600 text-white px-4 py-2 rounded w-full mt-4 disabled:opacity-50"
