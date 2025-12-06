@@ -4,6 +4,7 @@ import doHoaSen.SpeedNews.auth.domain.*;
 import doHoaSen.SpeedNews.auth.dto.AuthDtos;
 import doHoaSen.SpeedNews.auth.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,16 @@ public class EmailVerificationService {
     private final JavaMailSender mailSender;
     private final JwtService jwt;
     private final UserRepo users;
+    private final Environment env;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendVerificationMail(AppUser user) {
+
+        // 메일 비활성화 환경이면 실행 안함
+        if (!mailEnabled()) {
+            System.out.println("📨 [MAIL DISABLED] 메일 발송 스킵: " + user.getEmail());
+            return;
+        }
         // 기존 인증 무효화
         verifications.invalidateAllByUser(user.getId());
 
@@ -73,7 +81,8 @@ public class EmailVerificationService {
             helper.setText(html, true);
             mailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("메일 발송 실패", e);
+            System.err.println("이메일 발송 실패: " + e.getMessage());
+//            throw new RuntimeException("메일 발송 실패", e);
         }
     }
 
@@ -144,6 +153,10 @@ public class EmailVerificationService {
         } catch (Exception e) {
             throw new RuntimeException("메일 발송 실패", e);
         }
+    }
+
+    private boolean mailEnabled() {
+        return env.getProperty("mail.enabled", Boolean.class, false);
     }
 
 }

@@ -8,7 +8,11 @@ export default function LoginPage() {
   const [pw, setPw] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // 메일 재전송 관련 상태
+  // 환경 설정
+  const ENV = import.meta.env.VITE_ENV;
+  const skipVerification = ENV === "staging" || ENV === "prod";
+
+  // 재전송 관련 상태 (local/dev 전용)
   const [resendEmail, setResendEmail] = useState('');
   const [resendLoading, setResendLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -16,15 +20,17 @@ export default function LoginPage() {
   const { login } = useAuth();
   const nav = useNavigate();
 
-  /** 로그인 시도 */
+  /** 로그인 */
   const onLogin = async () => {
     try {
       setLoading(true);
       await login(email, pw);
+
       alert("로그인 성공!");
       nav("/");
     } catch (e: any) {
-      if (e.message?.includes("이메일 인증")) {
+      // 이메일 인증 필요 메시지는 local/dev 에서만 노출
+      if (!skipVerification && e?.message?.includes("이메일 인증")) {
         alert("⚠️ 이메일 인증 후 로그인 가능합니다.\n메일함을 확인해주세요.");
       } else {
         alert("로그인 실패: " + (e?.response?.data?.error ?? e?.message ?? "알 수 없는 오류"));
@@ -34,12 +40,13 @@ export default function LoginPage() {
     }
   };
 
-  /** 이메일 인증 메일 재발송 */
+  /** 이메일 재전송 (local/dev 전용) */
   const resendVerification = async () => {
     if (!resendEmail) {
       alert("가입 시 사용한 이메일을 입력해주세요.");
       return;
     }
+
     try {
       setResendLoading(true);
       setMessage('');
@@ -58,34 +65,36 @@ export default function LoginPage() {
     <div className="p-4 max-w-sm mx-auto">
       <h1 className="text-xl font-bold mb-4 text-center">로그인</h1>
 
-      {/* 이메일 재전송 섹션 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-5">
-        <p className="text-sm text-blue-700 mb-2 text-center">
-          이메일 인증 메일을 받지 못하셨나요?
-        </p>
-
-        <input
-          type="email"
-          placeholder="가입 시 사용한 이메일"
-          value={resendEmail}
-          onChange={(e) => setResendEmail(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          onClick={resendVerification}
-          disabled={resendLoading}
-          className="bg-blue-600 text-white text-sm px-3 py-2 w-full rounded hover:bg-blue-700 transition disabled:opacity-50"
-        >
-          {resendLoading ? "재발송 중..." : "인증 메일 다시 보내기"}
-        </button>
-
-        {message && (
-          <p className="mt-3 text-sm text-center text-gray-700 whitespace-pre-line">
-            {message}
+      {/* ⛔ 인증 메일 재전송은 local/dev 에서만 보임 */}
+      {!skipVerification && (
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-5">
+          <p className="text-sm text-blue-700 mb-2 text-center">
+            이메일 인증 메일을 받지 못하셨나요?
           </p>
-        )}
-      </div>
+
+          <input
+            type="email"
+            placeholder="가입 시 사용한 이메일"
+            value={resendEmail}
+            onChange={(e) => setResendEmail(e.target.value)}
+            className="border border-gray-300 rounded-md p-2 w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <button
+            onClick={resendVerification}
+            disabled={resendLoading}
+            className="bg-blue-600 text-white text-sm px-3 py-2 w-full rounded hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {resendLoading ? "재발송 중..." : "인증 메일 다시 보내기"}
+          </button>
+
+          {message && (
+            <p className="mt-3 text-sm text-center text-gray-700 whitespace-pre-line">
+              {message}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* 로그인 섹션 */}
       <input
@@ -101,6 +110,7 @@ export default function LoginPage() {
         value={pw}
         onChange={(e) => setPw(e.target.value)}
       />
+
       <button
         className="bg-blue-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
         onClick={onLogin}

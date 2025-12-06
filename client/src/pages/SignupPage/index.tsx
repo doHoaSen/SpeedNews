@@ -10,6 +10,10 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
+  // 현재 환경 가져오기
+  const ENV = import.meta.env.MODE; 
+  const SKIP_EMAIL_VERIFY = ENV === "staging" || ENV === "production";
+
   const register = async () => {
     if (!name || !email || !pw || !phone) {
       return alert("모든 필드를 입력하세요.");
@@ -23,7 +27,15 @@ export default function SignupPage() {
         password: pw,
         phone,
       });
-      alert("회원가입 완료! 이메일 인증 후 로그인해주세요.");
+
+      if (SKIP_EMAIL_VERIFY) {
+        // staging/prod: 이메일 인증 없음
+        alert("회원가입이 완료되었습니다! 바로 로그인해주세요.");
+      } else {
+        // local/dev: 이메일 인증 필요
+        alert("회원가입 완료! 이메일 인증 후 로그인해주세요.");
+      }
+
       nav("/login");
     } catch (e: any) {
       alert("회원가입 실패: " + (e.response?.data?.message || e.message));
@@ -62,8 +74,8 @@ export default function SignupPage() {
         required
       />
       <p className="text-sm text-gray-500 mb-3">
-  비밀번호는 6자 이상이며, 문자·숫자와 기호를 포함해야 합니다.
-</p>
+        비밀번호는 6자 이상이며, 문자·숫자와 기호를 포함해야 합니다.
+      </p>
 
       <input
         className="border p-2 w-full mb-2 rounded"

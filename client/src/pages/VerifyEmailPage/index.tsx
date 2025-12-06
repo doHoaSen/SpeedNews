@@ -2,6 +2,21 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function VerifyEmailPage() {
+  const ENV = import.meta.env.VITE_ENV;
+  const SKIP_EMAIL = ENV === "staging" || ENV === "production";
+
+  // staging/prod에서는 이메일 인증 페이지 사용 금지
+  if (SKIP_EMAIL) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-lg text-gray-700">
+          이 환경에서는 이메일 인증이 필요하지 않습니다.
+        </p>
+      </div>
+    );
+  }
+
+  // local/dev 환경에서만 아래 인증 로직 실행
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
@@ -33,7 +48,7 @@ export default function VerifyEmailPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md p-2 focus:ring-blue-500"
           />
           <input
             type="text"
@@ -41,14 +56,14 @@ export default function VerifyEmailPage() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             required
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md p-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             disabled={status === "loading"}
-            className="bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700"
           >
-            {status === "loading" ? "인증 중..." : "인증하기"}
+            {status === "loading" ? "인증 중…" : "인증하기"}
           </button>
         </form>
         {message && (
