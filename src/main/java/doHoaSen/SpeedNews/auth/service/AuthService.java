@@ -10,6 +10,7 @@ import doHoaSen.SpeedNews.common.util.Hash;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,16 @@ public class AuthService {
     private final JwtService jwt;
     private final EmailVerificationService emailService;
     private final ApplicationEventPublisher eventPublisher;
+    private final Environment env;
 
     /** 회원가입 */
     @Transactional(noRollbackFor = ResponseStatusException.class)
     public void register(RegisterReq req) {
         if (!PwPolicy.isStrong(req.password()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "weak password");
+
+        boolean skipVerification = Arrays.asList(env.getActiveProfiles()).contains("staging")
+                || Arrays.asList(env.getActiveProfiles()).contains("prod");
 
         var email = req.email().toLowerCase();
         var existing = users.findByEmail(email);
@@ -44,8 +49,8 @@ public class AuthService {
             var user = existing.get();
 
             // 이미 인증된 유저라면 중복가입 불가
-            if (user.isEmailVerified()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 인증된 이메일입니다.");
+            if (user.isEmailVerified() || skipVerification) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
             }
 
             // 인증 안 된 유저: 48시간 이내면 재인증 메일 재발송
@@ -65,17 +70,25 @@ public class AuthService {
         user.setEmail(email);
         user.setPasswordHash(Passwords.hash(req.password()));
         user.setName(req.name());
+        user.setPhone(req.phone());
         user.setEmailVerified(false);
         user.setEnabled(true);
         user.setCreatedAt(Instant.now());
         user.setUpdatedAt(Instant.now());
         user.getRoles().add(roles.findByName("ROLE_USER").orElseThrow());
 
-        // 즉시 INSERT 및 flush (FK 문제 해결의 핵심)
-        users.saveAndFlush(user);
-        // 트랜잭션 커밋 후 이메일 발송 이벤트 발행
-        eventPublisher.publishEvent(new SendVerificationEmailEvent(user.getId()));
+        // 이메일 인증을 스킵해야 하는 환경(staging/prod)
+        if (skipVerification) {
+            user.setEmailVerified(true);
+            users.saveAndFlush(user);
+            return; // 메일 발송 스킵
+        }
 
+
+        // 로컬/개발 환경에서는 이메일 인증 필요
+        user.setEmailVerified(false);
+        users.saveAndFlush(user);
+        eventPublisher.publishEvent(new SendVerificationEmailEvent(user.getId()));
 
         System.out.println("📧 이메일 인증 발송 이벤트 등록됨: " + user.getEmail());
 
@@ -115,6 +128,13 @@ public class AuthService {
     /** 재인증 요청 */
     @Transactional
     public void resendVerification(String email) {
+        boolean skipVerification = Arrays.asList(env.getActiveProfiles()).contains("staging")
+                || Arrays.asList(env.getActiveProfiles()).contains("prod");
+
+        if (skipVerification) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이 환경에서는 이메일 인증 기능이 비활성화되어 있습니다.");
+        }
+
         var user = users.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "가입되지 않은 이메일입니다."));
 
@@ -126,13 +146,16 @@ public class AuthService {
 
     /** 로그인 */
     public TokenRes login(LoginReq req) {
+        boolean skipVerification = Arrays.asList(env.getActiveProfiles()).contains("staging")
+                || Arrays.asList(env.getActiveProfiles()).contains("prod");
+
         var u = users.findByEmail(req.email().toLowerCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        if (!u.isEmailVerified())
+        if (!skipVerification && !u.isEmailVerified())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "이메일 인증이 필요합니다.");
 
-        if (!Passwords.verify(u.getPasswordHash(), req.password()))
+        if (!Passwords.verify(req.password(), u.getPasswordHash()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         String family = UUID.randomUUID().toString().replace("-", "");
@@ -175,6 +198,15 @@ public class AuthService {
 
     @Transactional
     public void sendPasswordResetMail(String email) {
+        boolean skipVerification = Arrays.asList(env.getActiveProfiles()).contains("staging")
+                || Arrays.asList(env.getActiveProfiles()).contains("prod");
+
+        // staging/prod → 메일 발송 스킵
+        if (skipVerification) {
+            System.out.println("[INFO] staging/prod 환경: 비밀번호 재설정 이메일 전송 스킵됨");
+            return;
+        }
+
         var user = users.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "등록되지 않은 이메일입니다."));
 
