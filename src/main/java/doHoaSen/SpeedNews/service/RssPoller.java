@@ -1,7 +1,7 @@
 package doHoaSen.SpeedNews.service;
 
 import doHoaSen.SpeedNews.metrics.PollingMetrics;
-import doHoaSen.SpeedNews.news.domain.NewsItem;
+import doHoaSen.SpeedNews.dto.NewsItem;
 import doHoaSen.SpeedNews.sse.SseHub;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
