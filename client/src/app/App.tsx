@@ -8,7 +8,14 @@ import { ListNewsCard } from "../features/news/ui/ListNewsCard";
 import "./styles/index.css";
 //import AuthBar from "../features/auth/ui/AuthBar";
 
-type SourceKey = "hk" | "yna";
+type SourceKey = 
+  "hk" 
+  | "yna" 
+  | "asiae"
+  | "fn"
+  | "herald"
+  | "mk";
+
 type ViewMode = "tile" | "list";
 
 const SOURCES: Record<
@@ -30,6 +37,7 @@ const SOURCES: Record<
     },
     defaultCat: "all",
   },
+
   yna: {
     label: "연합뉴스",
     cats: {
@@ -42,7 +50,63 @@ const SOURCES: Record<
     },
     defaultCat: "latest",
   },
+
+  asiae: {
+    label: "아시아경제",
+    cats: {
+      all: { label: "전체", feedKey: "asiae-all" },
+      economy: { label: "경제", feedKey: "asiae-economy" },
+      stock: { label: "증권", feedKey: "asiae-stock" },
+      it: { label: "산업·IT", feedKey: "asiae-it" },
+      politics: { label: "정치", feedKey: "asiae-politics" },
+      world: { label: "국제", feedKey: "asiae-world" },
+    },
+    defaultCat: "all",
+  },
+
+  fn: {
+    label: "파이낸셜뉴스",
+    cats: {
+      all: { label: "전체", feedKey: "fn-all" },
+      economy: { label: "경제", feedKey: "fn-economy" },
+      stock: { label: "증권", feedKey: "fn-stock" },
+      it: { label: "IT", feedKey: "fn-it" },
+      world: { label: "국제", feedKey: "fn-world" },
+      estate: { label: "부동산", feedKey: "fn-estate" },
+      industry: { label: "산업", feedKey: "fn-industry" },
+      medical: { label: "의학·과학", feedKey: "fn-medical" },
+    },
+    defaultCat: "all",
+  },
+
+  herald: {
+    label: "헤럴드경제",
+    cats: {
+      all: { label: "전체", feedKey: "herald-all" },
+      economy: { label: "경제", feedKey: "herald-economy" },
+      finance: { label: "증권", feedKey: "herald-finance" },
+      estate: { label: "부동산", feedKey: "herald-estate" },
+      industry: { label: "산업", feedKey: "herald-industry" },
+      politics: { label: "정치", feedKey: "herald-politics" },
+      it: { label: "IT", feedKey: "herald-it" },
+    },
+    defaultCat: "all",
+  },
+
+  mk: {
+    label: "매일경제",
+    cats: {
+      headline: { label: "헤드라인", feedKey: "mk-headline" },
+      all: { label: "전체", feedKey: "mk-all" },
+      economy: { label: "경제", feedKey: "mk-economy" },
+      stock: { label: "증권", feedKey: "mk-stock" },
+      management: { label: "기업·경영", feedKey: "mk-management" },
+      science: { label: "IT·과학", feedKey: "mk-science" },
+    },
+    defaultCat: "headline",
+  },
 };
+
 
 // 링크 기준 중복 제거
 const dedupeByLink = (arr: News[]) => {

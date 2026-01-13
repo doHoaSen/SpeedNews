@@ -1,5 +1,6 @@
 package doHoaSen.SpeedNews.news.service;
 
+import doHoaSen.SpeedNews.metrics.PollingMetrics;
 import doHoaSen.SpeedNews.news.domain.NewsItem;
 import doHoaSen.SpeedNews.sse.SseHub;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,17 +24,26 @@ public class RssPoller {
     // 카테고리별로 본 링크 저장 (간단 중복 방지)
     private final Map<String, Set<String>> seen = new ConcurrentHashMap<>();
 
-    @Scheduled(fixedDelay = 300_000)
+    @Scheduled(fixedDelayString = "${rss.polling.delay}")
     public void tick() {
-        // ✅ Null 문제 회피: 빈 컬렉션 방어
-        Set<String> cats = Optional.ofNullable(rss.categories()).orElseGet(Collections::emptySet);
+        // Null 문제 회피: 빈 컬렉션 방어
+        Set<String> cats =
+                Optional.ofNullable(rss.categories())
+                        .orElseGet(Collections::emptySet);
 
         for (String cat : cats) {
-            List<NewsItem> list = Optional.ofNullable(rss.fetch(cat)).orElseGet(List::of);
+            List<NewsItem> list =
+                    Optional.ofNullable(rss.fetch(cat))
+                            .orElseGet(List::of);
+
+            if (list.isEmpty()){
+                PollingMetrics.emptyFetchCount.incrementAndGet();
+            }
 
             // LRU 비슷한 트림이 되는 LinkedHashMap 백킹 Set
             Set<String> bucket = seen.computeIfAbsent(cat, k ->
-                    Collections.newSetFromMap(new LinkedHashMap<String, Boolean>(256, 0.75f, true) {
+                    Collections.newSetFromMap(
+                            new LinkedHashMap<String, Boolean>(256, 0.75f, true) {
                         @Override
                         protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
                             return size() > 800;
@@ -44,8 +54,11 @@ public class RssPoller {
             for (NewsItem item : list) {
                 String id = item.link(); // GUID가 있으면 그걸 써도 됨
                 if (id != null && bucket.add(id)) {
+                    // SSE publish 계측
+                    PollingMetrics.ssePublishCount.incrementAndGet();
                     hub.publish(cat, item);         // 카테고리 채널
                     if (!"all".equals(cat)) {
+                        PollingMetrics.ssePublishCount.incrementAndGet();
                         hub.publish("all", item);   // 통합 채널
                     }
                 }
