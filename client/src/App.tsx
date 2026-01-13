@@ -6,7 +6,14 @@ import { SquareNewsCard } from "./components/SquareNewsCard";
 import { ListNewsCard } from "./components/ListNewsCard";
 import "./index.css";
 
-type SourceKey = "hk" | "yna";
+type SourceKey =
+  "hk"
+  | "yna"
+  | "asiae"
+  | "fn"
+  | "herald"
+  | "mk";
+
 type ViewMode = "tile" | "list";
 
 const SOURCES: Record<
@@ -28,6 +35,7 @@ const SOURCES: Record<
     },
     defaultCat: "all",
   },
+
   yna: {
     label: "연합뉴스",
     cats: {
@@ -39,6 +47,61 @@ const SOURCES: Record<
       world: { label: "세계", feedKey: "yna-world" },
     },
     defaultCat: "latest",
+  },
+
+  asiae: {
+    label: "아시아경제",
+    cats: {
+      all: { label: "전체", feedKey: "asiae-all" },
+      economy: { label: "경제", feedKey: "asiae-economy" },
+      stock: { label: "증권", feedKey: "asiae-stock" },
+      it: { label: "산업·IT", feedKey: "asiae-it" },
+      politics: { label: "정치", feedKey: "asiae-politics" },
+      world: { label: "국제", feedKey: "asiae-world" },
+    },
+    defaultCat: "all",
+  },
+
+  fn: {
+    label: "파이낸셜뉴스",
+    cats: {
+      all: { label: "전체", feedKey: "fn-all" },
+      economy: { label: "경제", feedKey: "fn-economy" },
+      stock: { label: "증권", feedKey: "fn-stock" },
+      it: { label: "IT", feedKey: "fn-it" },
+      world: { label: "국제", feedKey: "fn-world" },
+      estate: { label: "부동산", feedKey: "fn-estate" },
+      industry: { label: "산업", feedKey: "fn-industry" },
+      medical: { label: "의학·과학", feedKey: "fn-medical" },
+    },
+    defaultCat: "all",
+  },
+
+  herald: {
+    label: "헤럴드경제",
+    cats: {
+      all: { label: "전체", feedKey: "herald-all" },
+      economy: { label: "경제", feedKey: "herald-economy" },
+      finance: { label: "증권", feedKey: "herald-finance" },
+      estate: { label: "부동산", feedKey: "herald-estate" },
+      industry: { label: "산업", feedKey: "herald-industry" },
+      politics: { label: "정치", feedKey: "herald-politics" },
+      it: { label: "IT", feedKey: "herald-it" },
+    },
+    defaultCat: "all",
+  },
+
+  mk: {
+    label: "매일경제",
+    cats: {
+      headline: { label: "헤드라인", feedKey: "mk-headline" },
+      all: { label: "전체", feedKey: "mk-all" },
+      economy: { label: "경제", feedKey: "mk-economy" },
+      stock: { label: "증권", feedKey: "mk-stock" },
+      management: { label: "기업·경영", feedKey: "mk-management" },
+      science: { label: "IT·과학", feedKey: "mk-science" },
+    },
+    defaultCat: "headline",
   },
 };
 
@@ -111,7 +174,7 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
     if (!SOURCES[source].cats[cat]) {
       setCat(SOURCES[source].defaultCat);
     }
-  }, [source]); // eslint-disable-line
+  }, [source, cat]);
 
   // 배너 노출 조건: 아직 아무 아이템도 없고 error일 때만
   const showErrorBanner = error && (items?.length ?? 0) === 0 && (initialItems?.length ?? 0) === 0;
@@ -121,8 +184,8 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
       <header className="header">
         <div>
           <h1>SpeedNews</h1>
-        <p className="subtitle">한국경제/연합뉴스 RSS를 실시간으로 모아보는 가벼운 피드</p>
-        <p className="subtitle">본 페이지는 개인 개발 학습용이며, 클릭 시 원문 기사로 이동합니다.</p>
+          <p className="subtitle">국내 주요 언론사의 RSS 뉴스를 실시간으로 모아 빠르게 탐색할 수 있는 뉴스 피드입니다.</p>
+          <p className="subtitle">본 페이지는 개인 개발 학습용이며, 기사 제목을 클릭하면 원문 페이지로 이동합니다.</p>
         </div>
 
         {/* 에러 배너 */}
@@ -140,7 +203,7 @@ export default function App({ initialItems = [] }: { initialItems?: News[] }) {
               fontSize: "14px",
             }}
           >
-            서버 응답이 느리거나 실패했어요. 잠시 후 새로고침해 주세요.
+            서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.
           </div>
         )}
 
