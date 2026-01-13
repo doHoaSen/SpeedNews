@@ -27,6 +27,26 @@ dependencies {
 	// (선택) HTML 파싱(og:image 추출 등 필요 시)
 	implementation("org.jsoup:jsoup:1.17.2")
 
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.auth0:java-jwt:4.4.0'        // JWT
+	implementation 'de.mkammerer:argon2-jvm:2.11'    // Argon2id
+	implementation 'com.bucket4j:bucket4j-core:8.10.1'
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'org.flywaydb:flyway-core:10.17.0'
+	implementation 'org.flywaydb:flyway-database-postgresql:10.17.0'
+
+	implementation 'net.nurigo:sdk:4.3.0'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+	// JavaMailSender
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.1'
+
+// mail template 사용을 위해서
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation("com.sun.mail:jakarta.mail:2.0.1")
+
 	compileOnly("org.projectlombok:lombok:1.18.32")
 	annotationProcessor("org.projectlombok:lombok:1.18.32")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

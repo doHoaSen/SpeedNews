@@ -1,0 +1,68 @@
+spring:
+  config:
+    activate:
+      on-profile: staging
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+#  flyway:
+#    enabled: true
+#    locations: classpath:db/migration
+
+    # 🚫 Flyway는 import.sql과 충돌 방지를 위해 임시 비활성화
+  flyway:
+    enabled: false
+
+  # ✅ import.sql 자동 실행
+  sql:
+    init:
+      mode: always        # import.sql 실행 활성화
+      platform: postgres  # PostgreSQL용
+      encoding: UTF-8     # 혹시 한글 포함되어 있으면 안전하게
+
+  mail:
+    enable: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.hibernate.SQL: warn
+
+management:
+  health:
+    mail:
+      enabled: false  # 메일 헬스체크 비활성화
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+security:
+  jwt:
+    secret: ${SECURITY_JWT_SECRET}
