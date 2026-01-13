@@ -1,4 +1,4 @@
-package doHoaSen.SpeedNews.service;
+package doHoaSen.SpeedNews.news.service;
 
 import doHoaSen.SpeedNews.metrics.PollingMetrics;
 import doHoaSen.SpeedNews.news.domain.NewsItem;
