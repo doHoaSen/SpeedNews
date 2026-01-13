@@ -1,6 +1,7 @@
 package doHoaSen.SpeedNews.service;
 
-import doHoaSen.SpeedNews.dto.NewsItem;
+import doHoaSen.SpeedNews.metrics.PollingMetrics;
+import doHoaSen.SpeedNews.news.domain.NewsItem;
 import doHoaSen.SpeedNews.sse.SseHub;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,38 +15,52 @@ public class RssPoller {
     private final RssService rss;
     private final SseHub hub;
 
-    // 생성자 주입 (Lombok 없이 확실하게)
+    // 생성자 주입
     public RssPoller(RssService rss, SseHub hub) {
         this.rss = rss;
         this.hub = hub;
     }
 
-    // 카테고리별로 본 링크 저장 (간단 중복 방지)
+    // 카테고리별로 본 링크 저장 (중복 방지, LRU)
     private final Map<String, Set<String>> seen = new ConcurrentHashMap<>();
 
-    @Scheduled(fixedDelay = 30_000)
+    @Scheduled(fixedDelayString = "${rss.polling.delay}")
     public void tick() {
-        // ✅ Null 문제 회피: 빈 컬렉션 방어
-        Set<String> cats = Optional.ofNullable(rss.categories()).orElseGet(Collections::emptySet);
+        // Null 방어
+        Set<String> cats =
+                Optional.ofNullable(rss.categories())
+                        .orElseGet(Collections::emptySet);
 
         for (String cat : cats) {
-            List<NewsItem> list = Optional.ofNullable(rss.fetch(cat)).orElseGet(List::of);
+            List<NewsItem> list =
+                    Optional.ofNullable(rss.fetch(cat))
+                            .orElseGet(List::of);
 
-            // LRU 비슷한 트림이 되는 LinkedHashMap 백킹 Set
+            if (list.isEmpty()) {
+                PollingMetrics.emptyFetchCount.incrementAndGet();
+            }
+
+            // LRU-like Set (최대 800)
             Set<String> bucket = seen.computeIfAbsent(cat, k ->
-                    Collections.newSetFromMap(new LinkedHashMap<String, Boolean>(256, 0.75f, true) {
-                        @Override protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
-                            return size() > 800;
-                        }
-                    })
+                    Collections.newSetFromMap(
+                            new LinkedHashMap<String, Boolean>(256, 0.75f, true) {
+                                @Override
+                                protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
+                                    return size() > 800;
+                                }
+                            }
+                    )
             );
 
             for (NewsItem item : list) {
-                String id = item.link(); // GUID가 있으면 그걸 써도 됨
+                String id = item.link();
                 if (id != null && bucket.add(id)) {
-                    hub.publish(cat, item);         // 카테고리 채널
+                    PollingMetrics.ssePublishCount.incrementAndGet();
+                    hub.publish(cat, item);
+
                     if (!"all".equals(cat)) {
-                        hub.publish("all", item);   // 통합 채널
+                        PollingMetrics.ssePublishCount.incrementAndGet();
+                        hub.publish("all", item);
                     }
                 }
             }

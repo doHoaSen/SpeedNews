@@ -41,3 +41,42 @@ news:
     yna-industry: "https://www.yna.co.kr/rss/industry.xml"
     yna-society: "https://www.yna.co.kr/rss/society.xml"
     yna-world: "https://www.yna.co.kr/rss/international.xml"
+
+    # 아시아경제
+    asiae-all: "https://www.asiae.co.kr/rss/all.htm"
+    asiae-economy: "https://www.asiae.co.kr/rss/economy.htm"
+    asiae-stock: "https://www.asiae.co.kr/rss/stock.htm"
+    asiae-it: "https://www.asiae.co.kr/rss/industry-IT.htm"
+    asiae-politics: "https://www.asiae.co.kr/rss/politics.htm"
+    asiae-world: "https://www.asiae.co.kr/rss/world.htm"
+
+    # 파이낸셜뉴스
+    fn-all: "http://www.fnnews.com/rss/r20/fn_realnews_all.xml"
+    fn-economy: "http://www.fnnews.com/rss/r20/fn_realnews_economy.xml"
+    fn-stock: "http://www.fnnews.com/rss/r20/fn_realnews_stock.xml"
+    fn-it: "http://www.fnnews.com/rss/r20/fn_realnews_it.xml"
+    fn-world: "http://www.fnnews.com/rss/r20/fn_realnews_international.xml"
+    fn-estate: "http://www.fnnews.com/rss/r20/fn_realnews_realestate.xml"
+    fn-industry: "http://www.fnnews.com/rss/r20/fn_realnews_industry.xml"
+    fn-medical: "http://www.fnnews.com/rss/r20/fn_realnews_medical.xml"
+
+    # 헤럴드경제
+    herald-all: "https://biz.heraldcorp.com/rss/google/newsAll"
+    herald-economy: "https://biz.heraldcorp.com/rss/google/economy"
+    herald-finance: "https://biz.heraldcorp.com/rss/google/finance"
+    herald-estate: "https://biz.heraldcorp.com/rss/google/realestate"
+    herald-industry: "https://biz.heraldcorp.com/rss/google/industry"
+    herald-politics: "https://biz.heraldcorp.com/rss/google/politics"
+    herald-it: "https://biz.heraldcorp.com/rss/google/it"
+
+    # 매일경제
+    mk-headline: "https://www.mk.co.kr/rss/30000001/"
+    mk-all: "https://www.mk.co.kr/rss/40300001/"
+    mk-economy: "https://www.mk.co.kr/rss/30100041/"
+    mk-stock: "https://www.mk.co.kr/rss/50200011/"
+    mk-management: "https://www.mk.co.kr/rss/50100032/"
+    mk-science: "https://www.mk.co.kr/rss/50700001/"
+
+rss:
+  polling:
+    delay: 600000 # 10분
