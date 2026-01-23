@@ -1,9 +1,10 @@
 // src/App.tsx
 import { useEffect, useMemo, useState } from "react";
-import { useFeed } from "./api/useFeed";
-import type { News } from "./api/useFeed";
-import { SquareNewsCard } from "./components/SquareNewsCard";
-import { ListNewsCard } from "./components/ListNewsCard";
+import { useFeed } from "../src/api/useFeed";
+import type { News } from "../src/api/useFeed";
+import { SquareNewsCard } from "../src/components/SquareNewsCard";
+import { ListNewsCard } from "../src/components/ListNewsCard";
+
 import "./index.css";
 
 type SourceKey =
