@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+.time-badge {
+  margin-left: 8px;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+.time-badge.exact {
+  color: #333;
+}
+
+.time-badge.estimated {
+  color: #888;
+  background-color: #f2f2f2;
+}

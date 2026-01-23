@@ -1,9 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import {apiUrl} from "./config.ts";
 
+
 export type News = {
-  source: string; category: string; title: string; link: string;
-  description?: string; author?: string; pubDateIso?: string; thumbnail?: string;
+  source: string;
+  category: string;
+  title: string;
+  link: string;
+  description?: string;
+  author?: string;
+  pubDateIso?: string | null;   // ⬅ null 허용 (서버 현실 반영)
+  receivedAt?: string;          // ⬅ 추가
+  thumbnail?: string;
 };
 
 export function useFeed(category: string) {

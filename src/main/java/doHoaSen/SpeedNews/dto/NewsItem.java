@@ -8,5 +8,6 @@ public record NewsItem (
     String description,
     String author,
     String pubDateIso,
-    String thumbnail
+    String thumbnail,
+    String receivedAt
 ){}

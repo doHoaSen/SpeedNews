@@ -1,5 +1,6 @@
 // src/components/SquareNewsCard.tsx
 import type { News } from "../api/useFeed";
+import { formatNewsTime } from "../utils/FormatNewsTime";
 
 const catEmoji: Record<string, string> = {
   economy: "📈", politics: "🏛️", it: "💻", finance: "💹",
@@ -7,6 +8,7 @@ const catEmoji: Record<string, string> = {
 };
 
 export function SquareNewsCard({ n }: { n: News }) {
+  const time = formatNewsTime(n.pubDateIso);
   const emoji = catEmoji[n.category] ?? "📰";
 
   return (
@@ -21,17 +23,19 @@ export function SquareNewsCard({ n }: { n: News }) {
       {/* ⬇️ 아주 작은 메타 */}
       <div className="tile-meta-small">
         {n.source ?? "한국경제"} | {n.category}
-        {n.pubDateIso
-    ? `${new Date(n.pubDateIso).toLocaleDateString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-      })} ${new Date(n.pubDateIso).toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      })}`
-    : ""}
-</div>
+
+        <span
+          className={`time-badge ${time.isEstimated ? "estimated" : "exact"}`}
+          title={
+            time.isEstimated
+              ? "발행 시각 정보가 제공되지 않은 기사입니다"
+              : undefined
+          }
+        >
+          {!time.isEstimated && "🕒 "}
+          {time.label}
+        </span>
+      </div>
     </a>
   );
 }

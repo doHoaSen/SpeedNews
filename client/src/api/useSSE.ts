@@ -7,7 +7,8 @@ export type News = {
   link: string;
   description?: string;
   author?: string;
-  pubDateIso?: string;
+  pubDateIso?: string | null;   // ⬅ null 허용 (서버 현실 반영)
+  receivedAt?: string;          // ⬅ 추가
   thumbnail?: string;
 };
 

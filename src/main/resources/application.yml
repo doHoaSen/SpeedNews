@@ -50,15 +50,15 @@ news:
     asiae-politics: "https://www.asiae.co.kr/rss/politics.htm"
     asiae-world: "https://www.asiae.co.kr/rss/world.htm"
 
-    # 파이낸셜뉴스
-    fn-all: "http://www.fnnews.com/rss/r20/fn_realnews_all.xml"
-    fn-economy: "http://www.fnnews.com/rss/r20/fn_realnews_economy.xml"
-    fn-stock: "http://www.fnnews.com/rss/r20/fn_realnews_stock.xml"
-    fn-it: "http://www.fnnews.com/rss/r20/fn_realnews_it.xml"
-    fn-world: "http://www.fnnews.com/rss/r20/fn_realnews_international.xml"
-    fn-estate: "http://www.fnnews.com/rss/r20/fn_realnews_realestate.xml"
-    fn-industry: "http://www.fnnews.com/rss/r20/fn_realnews_industry.xml"
-    fn-medical: "http://www.fnnews.com/rss/r20/fn_realnews_medical.xml"
+#    # 파이낸셜뉴스
+#    fn-all: "http://www.fnnews.com/rss/r20/fn_realnews_all.xml"
+#    fn-economy: "http://www.fnnews.com/rss/r20/fn_realnews_economy.xml"
+#    fn-stock: "http://www.fnnews.com/rss/r20/fn_realnews_stock.xml"
+#    fn-it: "http://www.fnnews.com/rss/r20/fn_realnews_it.xml"
+#    fn-world: "http://www.fnnews.com/rss/r20/fn_realnews_international.xml"
+#    fn-estate: "http://www.fnnews.com/rss/r20/fn_realnews_realestate.xml"
+#    fn-industry: "http://www.fnnews.com/rss/r20/fn_realnews_industry.xml"
+#    fn-medical: "http://www.fnnews.com/rss/r20/fn_realnews_medical.xml"
 
     # 헤럴드경제
     herald-all: "https://biz.heraldcorp.com/rss/google/newsAll"
@@ -75,7 +75,7 @@ news:
     mk-economy: "https://www.mk.co.kr/rss/30100041/"
     mk-stock: "https://www.mk.co.kr/rss/50200011/"
     mk-management: "https://www.mk.co.kr/rss/50100032/"
-    mk-science: "https://www.mk.co.kr/rss/50700001/"
+    mkeconomy: "https://www.mk.co.kr/rss/50000001/"
 
 rss:
   polling:
