@@ -51,14 +51,14 @@ news:
     asiae-world: "https://www.asiae.co.kr/rss/world.htm"
 
     # 파이낸셜뉴스
-    fn-all: "http://www.fnnews.com/rss/r20/fn_realnews_all.xml"
-    fn-economy: "http://www.fnnews.com/rss/r20/fn_realnews_economy.xml"
-    fn-stock: "http://www.fnnews.com/rss/r20/fn_realnews_stock.xml"
-    fn-it: "http://www.fnnews.com/rss/r20/fn_realnews_it.xml"
-    fn-world: "http://www.fnnews.com/rss/r20/fn_realnews_international.xml"
-    fn-estate: "http://www.fnnews.com/rss/r20/fn_realnews_realestate.xml"
-    fn-industry: "http://www.fnnews.com/rss/r20/fn_realnews_industry.xml"
-    fn-medical: "http://www.fnnews.com/rss/r20/fn_realnews_medical.xml"
+#    fn-all: "http://www.fnnews.com/rss/r20/fn_realnews_all.xml"
+#    fn-economy: "http://www.fnnews.com/rss/r20/fn_realnews_economy.xml"
+#    fn-stock: "http://www.fnnews.com/rss/r20/fn_realnews_stock.xml"
+#    fn-it: "http://www.fnnews.com/rss/r20/fn_realnews_it.xml"
+#    fn-world: "http://www.fnnews.com/rss/r20/fn_realnews_international.xml"
+#    fn-estate: "http://www.fnnews.com/rss/r20/fn_realnews_realestate.xml"
+#    fn-industry: "http://www.fnnews.com/rss/r20/fn_realnews_industry.xml"
+#    fn-medical: "http://www.fnnews.com/rss/r20/fn_realnews_medical.xml"
 
     # 헤럴드경제
     herald-all: "https://biz.heraldcorp.com/rss/google/newsAll"
@@ -79,4 +79,4 @@ news:
 
 rss:
   polling:
-    delay: 600000 # 10분
+    delay: 300000 #5분
